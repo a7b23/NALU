@@ -63,7 +63,7 @@ for i in range(len(cnn_out_unrolled)) :
 outputs = outputs[-1]			
 
 net = outputs
-net = slim.fully_connected(net, 50, activation_fn = tf.nn.relu)
+net = slim.fully_connected(net, 10, activation_fn = tf.nn.relu)
 net = slim.fully_connected(net, 1, activation_fn = tf.nn.relu)
 #net = tf.matmul(net, NACUnit('hidden', hidden_units, 25, reuse= False))
 #net = tf.matmul(net, NACUnit('final', 25, 1, reuse= False))
@@ -91,7 +91,7 @@ for i in range(total_steps):
 	if i%display_steps == 0:
 		print("step %d, training loss %g"%(i, l))
 
-saver.save(sess, './models1')
+saver.save(sess, './models')
 
 
 
