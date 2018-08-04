@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("/home/msarkar/adversarial/adversarial_reprogram/MNIST_data", one_hot=False)
+mnist = input_data.read_data_sets("./MNIST_data", one_hot=False)
 
 
 batch_size = 50
@@ -91,7 +91,7 @@ for i in range(total_steps):
 	if i%display_steps == 0:
 		print("step %d, training loss %g"%(i, l))
 
-saver.save(sess, './nac_model/models1')
+saver.save(sess, './models1')
 
 
 
