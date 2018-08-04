@@ -80,7 +80,7 @@ saver = tf.train.Saver()
 
 
 
-saver.restore(sess, './nac_model/models')
+saver.restore(sess, './models')
 
 
 l = sess.run(loss, feed_dict = {x:test_images, y_ : labels})
