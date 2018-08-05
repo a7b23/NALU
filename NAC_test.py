@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("/home/msarkar/adversarial/adversarial_reprogram/MNIST_data", one_hot=False)
+mnist = input_data.read_data_sets("MNIST_data", one_hot=False)
 
 test_images = mnist.test.images
 test_labels = mnist.test.labels
@@ -77,7 +77,7 @@ saver = tf.train.Saver()
 
 
 
-saver.restore(sess, './nac_model/models1')
+saver.restore(sess, './models')
 
 
 l = sess.run(loss, feed_dict = {x:test_images, y_ : labels})
