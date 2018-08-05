@@ -1,6 +1,7 @@
 # NALU
 
-## Under progress
+## This is an implementation of the paper "Neural Arithmetic Logic Units", Trask et al., ArXiV, 2018
+
 
 To start training, run -
 ```
@@ -11,6 +12,25 @@ To test the trained model run -
 ```
 python NAC_test.py
 ```
-The results at different extrapolation ranges can be obtained by changing the sequence_length value.
+To run the baseline GRU, run - 
+```
+python GRU.py
+```
+To test the baseline model run - 
+```
+python GRU_test.py
+```
 
-Currently the code achieves a mean absolute error of 17.17 and 242.25 at extrapolation lengths of 10 and 100 respectively.
+
+The mean absolute error at different extrapolation ranges can be obtained by changing the sequence_length value.
+
+The results(mean absolute error) have been given below :-
+
+
+|  Seq_length|   GRU    | NAC      |
+|------------|----------|----------|
+|     10     |  2.79    |   1.60   |
+|     100    |  371.18  |   6.65   |
+|     1000   |  4370.00 |   24.96  |
+
+
