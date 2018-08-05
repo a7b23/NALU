@@ -24,7 +24,7 @@ def CNNNetwork(input_image,scope='Mnist',reuse = False):
 			net = slim.fully_connected(net, 50, activation_fn = tf.nn.relu, scope = 'fc1')
 			net = tf.nn.dropout(net, 0.5)
 			net = slim.fully_connected(net,10,activation_fn=None,scope='fc2')
-						net = tf.nn.softmax(net)
+			net = tf.nn.softmax(net)
 			return net
 
 def NACUnit(scope, inp, out, reuse) :
