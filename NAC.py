@@ -86,7 +86,7 @@ for i in range(total_steps):
 	if i%display_steps == 0:
 		print("step %d, training loss %g"%(i, l))
 
-saver.save(sess, './nac_model/models1')
+saver.save(sess, './models')
 
 
 
