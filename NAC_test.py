@@ -7,7 +7,7 @@ mnist = input_data.read_data_sets("/home/msarkar/adversarial/adversarial_reprogr
 test_images = mnist.test.images
 test_labels = mnist.test.labels
 
-sequence_length = 1000
+sequence_length = 1
 batch_size = len(test_images)/sequence_length
 labels = np.split(test_labels, batch_size)
 labels = np.sum(labels, axis = -1)
@@ -25,9 +25,9 @@ def CNNNetwork(input_image,scope='Mnist',reuse = False):
 			net = slim.max_pool2d(net,[2, 2], 2, scope='pool2')
 			net = slim.flatten(net)
 			net = slim.fully_connected(net, 50, activation_fn = tf.nn.relu, scope = 'fc1')
-			#net = tf.nn.dropout(net, 0.5)
+			net = tf.nn.dropout(net, 1.0)
 			net = slim.fully_connected(net,10,activation_fn=None,scope='fc2')
-
+						net = tf.nn.softmax(net)
 			return net
 
 def NACUnit(scope, inp, out, reuse) :
@@ -39,11 +39,7 @@ def NACUnit(scope, inp, out, reuse) :
 def NAC_cell(inp, state, inp_units, hidden_units, reuse = False) :
 	with tf.variable_scope('nac_cell', reuse = reuse) :
 		w_input = NACUnit('w_input', inp_units, hidden_units, reuse)
-		w_hidden = NACUnit('w_hidden', hidden_units, hidden_units, reuse)
-		#b_hidden = tf.get_variable('bias', shape = [hidden_units], initializer=tf.constant_initializer(0.0))
-
-		return tf.matmul(inp, w_input) + tf.matmul(state, w_hidden)
-
+		return tf.matmul(inp, w_input) + state
 
 x = tf.placeholder(shape = [None, 784], dtype = tf.float32)
 y_ = tf.placeholder(shape = [None], dtype = tf.float32)
@@ -73,6 +69,7 @@ final_output = tf.squeeze(net)
 print(net.get_shape().as_list())
 
 loss = tf.reduce_mean(tf.abs(final_output - y_))
+accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.cast(tf.round(final_output), tf.float32),y_), tf.float32))
 
 sess = tf.InteractiveSession()
 sess.run(tf.global_variables_initializer())
@@ -80,12 +77,15 @@ saver = tf.train.Saver()
 
 
 
-saver.restore(sess, './models')
+saver.restore(sess, './nac_model/models1')
 
 
 l = sess.run(loss, feed_dict = {x:test_images, y_ : labels})
 print('the mean test loss is ', l)
 
+if sequence_length == 1 :
+	acc = sess.run(accuracy, feed_dict = {x:test_images, y_ : labels})
+	print('the mean acc is ', acc)
 
 
 

@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("./MNIST_data", one_hot=False)
+mnist = input_data.read_data_sets("MNIST_data", one_hot=False)
 
 
 batch_size = 50
@@ -24,7 +24,7 @@ def CNNNetwork(input_image,scope='Mnist',reuse = False):
 			net = slim.fully_connected(net, 50, activation_fn = tf.nn.relu, scope = 'fc1')
 			net = tf.nn.dropout(net, 0.5)
 			net = slim.fully_connected(net,10,activation_fn=None,scope='fc2')
-
+						net = tf.nn.softmax(net)
 			return net
 
 def NACUnit(scope, inp, out, reuse) :
@@ -36,10 +36,7 @@ def NACUnit(scope, inp, out, reuse) :
 def NAC_cell(inp, state, inp_units, hidden_units, reuse = False) :
 	with tf.variable_scope('nac_cell', reuse = reuse) :
 		w_input = NACUnit('w_input', inp_units, hidden_units, reuse)
-		w_hidden = NACUnit('w_hidden', hidden_units, hidden_units, reuse)
-		b_hidden = tf.get_variable('bias', shape = [hidden_units], initializer=tf.constant_initializer(0.0))
-
-		return tf.matmul(inp, w_input) + tf.matmul(state, w_hidden) 
+		return tf.matmul(inp, w_input) + state
 
 
 x = tf.placeholder(shape = [batch_size*sequence_length, 784], dtype = tf.float32)
@@ -65,8 +62,6 @@ outputs = outputs[-1]
 net = outputs
 net = slim.fully_connected(net, 10, activation_fn = tf.nn.relu)
 net = slim.fully_connected(net, 1, activation_fn = tf.nn.relu)
-#net = tf.matmul(net, NACUnit('hidden', hidden_units, 25, reuse= False))
-#net = tf.matmul(net, NACUnit('final', 25, 1, reuse= False))
 
 final_output = tf.squeeze(net)
 print(net.get_shape().as_list())
@@ -91,7 +86,7 @@ for i in range(total_steps):
 	if i%display_steps == 0:
 		print("step %d, training loss %g"%(i, l))
 
-saver.save(sess, './models')
+saver.save(sess, './nac_model/models1')
 
 
 
