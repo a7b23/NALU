@@ -2,6 +2,7 @@
 
 ## This is an implementation of the paper "Neural Arithmetic Logic Units", Trask et al., ArXiV, 2018
 
+## the code implements the MNIST arithmetic task given in the paper
 
 To start training, run -
 ```
